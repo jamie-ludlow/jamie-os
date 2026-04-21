@@ -1,71 +1,111 @@
 'use client';
 
+import { useState, useMemo, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { TaskDetailSheet } from '@/components/tasks/TaskDetailSheet';
 import { CreateTaskModal } from '@/components/tasks/CreateTaskModal';
 import { motion } from 'framer-motion';
-import { useState, useMemo } from 'react';
-import { Plus, Filter, Search, ArrowUpDown } from 'lucide-react';
-import { sampleTasks, statusColors, priorityColors, Task } from '@/lib/tasks/types';
+import {
+  Plus,
+  Search,
+  LayoutGrid,
+  Table2,
+  Calendar,
+  Eye,
+  EyeOff,
+  X,
+  ChevronDown,
+  AlertTriangle,
+} from 'lucide-react';
+import { sampleTasks, Task, TaskStatus, TaskPriority } from '@/lib/tasks/types';
 
-type SortField = 'title' | 'status' | 'priority' | 'dueDate';
-type SortOrder = 'asc' | 'desc';
+type ViewType = 'kanban' | 'table' | 'calendar' | 'blockers';
+type KanbanGroupBy = 'status' | 'priority' | 'assignee';
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>(sampleTasks);
+  const [view, setView] = useState<ViewType>('table');
+  const [kanbanGroupBy, setKanbanGroupBy] = useState<KanbanGroupBy>('status');
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [sortField, setSortField] = useState<SortField>('title');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  
+  // Filters
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState<TaskStatus[]>([]);
+  const [filterPriority, setFilterPriority] = useState<TaskPriority[]>([]);
+  const [filterAssignee, setFilterAssignee] = useState<string[]>([]);
+  const [hideDone, setHideDone] = useState(false);
+  const [filterDateFrom, setFilterDateFrom] = useState<string>('');
+  const [filterDateTo, setFilterDateTo] = useState<string>('');
 
-  // Filter and sort tasks
+  // Get unique values for filters
+  const uniqueStatuses = useMemo(() => [...new Set(tasks.map(t => t.status))], [tasks]);
+  const uniquePriorities = useMemo(() => [...new Set(tasks.map(t => t.priority))], [tasks]);
+  const uniqueAssignees = useMemo(() => [...new Set(tasks.filter(t => t.assignee).map(t => t.assignee!))], [tasks]);
+
+  // Filtered tasks
   const filteredTasks = useMemo(() => {
-    let result = tasks.filter((task) => {
-      if (searchTerm && !task.title.toLowerCase().includes(searchTerm.toLowerCase())) {
+    return tasks.filter((task) => {
+      // Search
+      if (searchQuery && !task.title.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
       }
-      if (selectedStatuses.length > 0 && !selectedStatuses.includes(task.status)) {
+      // Status filter
+      if (filterStatus.length > 0 && !filterStatus.includes(task.status)) {
+        return false;
+      }
+      // Priority filter
+      if (filterPriority.length > 0 && !filterPriority.includes(task.priority)) {
+        return false;
+      }
+      // Assignee filter
+      if (filterAssignee.length > 0 && !filterAssignee.includes(task.assignee || '')) {
+        return false;
+      }
+      // Hide done
+      if (hideDone && task.status === 'done') {
+        return false;
+      }
+      // Date range filter
+      if (filterDateFrom && task.dueDate && task.dueDate < new Date(filterDateFrom)) {
+        return false;
+      }
+      if (filterDateTo && task.dueDate && task.dueDate > new Date(filterDateTo)) {
         return false;
       }
       return true;
     });
+  }, [tasks, searchQuery, filterStatus, filterPriority, filterAssignee, hideDone, filterDateFrom, filterDateTo]);
 
-    // Sort
-    result.sort((a, b) => {
-      let aVal: any = a[sortField];
-      let bVal: any = b[sortField];
-
-      if (sortField === 'dueDate') {
-        aVal = aVal?.getTime() || Infinity;
-        bVal = bVal?.getTime() || Infinity;
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+      
+      // 'n' to create new task
+      if (e.key === 'n' && !isInput && !selectedTask) {
+        e.preventDefault();
+        setIsCreateOpen(true);
       }
-
-      if (typeof aVal === 'string') {
-        aVal = aVal.toLowerCase();
-        bVal = bVal.toLowerCase();
+      // '/' to focus search
+      if (e.key === '/' && !isInput) {
+        e.preventDefault();
+        document.querySelector<HTMLInputElement>('input[placeholder*="Search"]')?.focus();
       }
-
-      if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
-      if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
-      return 0;
-    });
-
-    return result;
-  }, [tasks, searchTerm, selectedStatuses, sortField, sortOrder]);
-
-  const handleToggleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortOrder('asc');
-    }
-  };
+      // Escape to close
+      if (e.key === 'Escape') {
+        setSelectedTask(null);
+        setIsCreateOpen(false);
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeydown);
+    return () => document.removeEventListener('keydown', handleKeydown);
+  }, [selectedTask]);
 
   const handleSaveTask = (updatedTask: Task) => {
-    setTasks(tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
+    setTasks(tasks.map(t => (t.id === updatedTask.id ? updatedTask : t)));
     setSelectedTask(null);
   };
 
@@ -80,27 +120,165 @@ export default function TasksPage() {
   };
 
   const handleDeleteTask = (taskId: string) => {
-    setTasks(tasks.filter((t) => t.id !== taskId));
+    setTasks(tasks.filter(t => t.id !== taskId));
     setSelectedTask(null);
   };
 
-  const toggleStatusFilter = (status: string) => {
-    setSelectedStatuses((prev) =>
-      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]
-    );
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setFilterStatus([]);
+    setFilterPriority([]);
+    setFilterAssignee([]);
+    setFilterDateFrom('');
+    setFilterDateTo('');
+    setHideDone(false);
   };
 
-  const SortHeader = ({ field, label }: { field: SortField; label: string }) => (
-    <th
-      onClick={() => handleToggleSort(field)}
-      className="px-6 py-3 text-left text-xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-bg-canvas)] cursor-pointer hover:bg-[var(--color-bg-elevated)] transition-colors"
-    >
-      <div className="flex items-center gap-2">
-        {label}
-        <ArrowUpDown className={`w-3 h-3 ${sortField === field ? 'opacity-100' : 'opacity-0'}`} />
+  const hasActiveFilters = searchQuery || filterStatus.length > 0 || filterPriority.length > 0 || 
+                           filterAssignee.length > 0 || hideDone || filterDateFrom || filterDateTo;
+
+  const renderTableView = () => (
+    <div className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-[var(--color-border-default)]">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-bg-canvas)]">
+                Task
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-bg-canvas)]">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-bg-canvas)]">
+                Priority
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-bg-canvas)]">
+                Due Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-bg-canvas)]">
+                Assignee
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[var(--color-border-subtle)]">
+            {filteredTasks.map((task) => (
+              <tr
+                key={task.id}
+                onClick={() => setSelectedTask(task)}
+                className="hover:bg-[var(--color-bg-elevated)] transition-colors cursor-pointer"
+              >
+                <td className="px-6 py-4 text-sm text-[var(--color-fg-primary)] font-medium truncate">
+                  {task.title}
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  <span className="inline-block px-2 py-1 rounded text-xs font-medium capitalize" 
+                    style={{
+                      backgroundColor: `var(--color-bg-elevated)`,
+                      color: task.status === 'done' ? 'var(--color-status-success)' :
+                             task.status === 'doing' ? 'var(--color-status-info)' :
+                             task.status === 'blocked' ? 'var(--color-status-danger)' :
+                             'var(--color-fg-muted)'
+                    }}>
+                    {task.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  <span className="capitalize font-medium"
+                    style={{
+                      color: task.priority === 'urgent' ? 'var(--color-status-danger)' :
+                             task.priority === 'high' ? 'var(--color-status-warning)' :
+                             task.priority === 'medium' ? 'var(--color-status-info)' :
+                             'var(--color-fg-muted)'
+                    }}>
+                    {task.priority}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-sm text-[var(--color-fg-secondary)]">
+                  {task.dueDate?.toLocaleDateString() || '—'}
+                </td>
+                <td className="px-6 py-4 text-sm text-[var(--color-fg-secondary)]">
+                  {task.assignee || '—'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </th>
+      {filteredTasks.length === 0 && (
+        <div className="px-6 py-12 text-center">
+          <p className="text-[var(--color-fg-muted)]">No tasks match your filters</p>
+        </div>
+      )}
+    </div>
   );
+
+  const renderKanbanView = () => {
+    const groupedTasks = useMemo(() => {
+      const groups: Record<string, Task[]> = {};
+      
+      const groupKey = kanbanGroupBy === 'status' ? 'status' : 
+                      kanbanGroupBy === 'priority' ? 'priority' : 'assignee';
+      
+      filteredTasks.forEach(task => {
+        const key = task[groupKey as keyof Task] || 'unassigned';
+        if (!groups[String(key)]) groups[String(key)] = [];
+        groups[String(key)].push(task);
+      });
+      
+      return groups;
+    }, [filteredTasks, kanbanGroupBy]);
+
+    const columnOrder = kanbanGroupBy === 'status' ? 
+      ['todo', 'doing', 'blocked', 'done', 'backlog'] :
+      kanbanGroupBy === 'priority' ?
+      ['urgent', 'high', 'medium', 'low'] :
+      ['Jamie', ...uniqueAssignees.filter(a => a !== 'Jamie'), 'unassigned'];
+
+    return (
+      <div className="grid auto-cols-max gap-4 overflow-x-auto pb-6" style={{ gridAutoFlow: 'column' }}>
+        {columnOrder.map((column) => (
+          <div
+            key={column}
+            className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-4 w-80 flex-shrink-0"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-[var(--color-fg-primary)] capitalize">
+                {column}
+              </h3>
+              <span className="text-xs text-[var(--color-fg-muted)]">
+                {(groupedTasks[column] || []).length}
+              </span>
+            </div>
+            <div className="space-y-3">
+              {(groupedTasks[column] || []).map((task) => (
+                <div
+                  key={task.id}
+                  onClick={() => setSelectedTask(task)}
+                  className="bg-[var(--color-bg-canvas)] border border-[var(--color-border-default)] rounded p-3 cursor-pointer hover:shadow-md transition-shadow"
+                >
+                  <p className="text-sm font-medium text-[var(--color-fg-primary)] mb-2 truncate">
+                    {task.title}
+                  </p>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="capitalize" style={{
+                      color: task.priority === 'urgent' ? 'var(--color-status-danger)' :
+                             task.priority === 'high' ? 'var(--color-status-warning)' :
+                             'var(--color-fg-muted)'
+                    }}>
+                      {task.priority}
+                    </span>
+                    <span className="text-[var(--color-fg-muted)]">
+                      {task.dueDate?.toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <AppLayout>
@@ -126,95 +304,177 @@ export default function TasksPage() {
           </div>
 
           {/* Toolbar */}
-          <div className="flex items-center gap-3 mb-6">
-            {/* Search */}
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--color-fg-muted)]" />
-              <input
-                type="text"
-                placeholder="Search tasks..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-lg bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] placeholder-[var(--color-fg-muted)] focus:border-[var(--color-brand-primary)] transition-colors text-sm"
-              />
+          <div className="space-y-4 mb-6">
+            {/* Search and View Controls */}
+            <div className="flex items-center gap-3">
+              {/* Search */}
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--color-fg-muted)]" />
+                <input
+                  type="text"
+                  placeholder="Search tasks... (press '/' to focus)"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] placeholder-[var(--color-fg-muted)] focus:border-[var(--color-brand-primary)] outline-none transition-colors text-sm"
+                />
+              </div>
+
+              {/* View Switcher */}
+              <div className="flex items-center gap-1 bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-1">
+                <button
+                  onClick={() => setView('table')}
+                  className={`p-2 rounded transition-colors ${
+                    view === 'table'
+                      ? 'bg-[var(--color-bg-elevated)] text-[var(--color-fg-primary)]'
+                      : 'text-[var(--color-fg-muted)] hover:text-[var(--color-fg-primary)]'
+                  }`}
+                  title="Table view"
+                >
+                  <Table2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setView('kanban')}
+                  className={`p-2 rounded transition-colors ${
+                    view === 'kanban'
+                      ? 'bg-[var(--color-bg-elevated)] text-[var(--color-fg-primary)]'
+                      : 'text-[var(--color-fg-muted)] hover:text-[var(--color-fg-primary)]'
+                  }`}
+                  title="Kanban view"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setView('calendar')}
+                  className={`p-2 rounded transition-colors ${
+                    view === 'calendar'
+                      ? 'bg-[var(--color-bg-elevated)] text-[var(--color-fg-primary)]'
+                      : 'text-[var(--color-fg-muted)] hover:text-[var(--color-fg-primary)]'
+                  }`}
+                  title="Calendar view"
+                >
+                  <Calendar className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setView('blockers')}
+                  className={`p-2 rounded transition-colors ${
+                    view === 'blockers'
+                      ? 'bg-[var(--color-bg-elevated)] text-[var(--color-fg-primary)]'
+                      : 'text-[var(--color-fg-muted)] hover:text-[var(--color-fg-primary)]'
+                  }`}
+                  title="Blockers view"
+                >
+                  <AlertTriangle className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Hide Done */}
+              <button
+                onClick={() => setHideDone(!hideDone)}
+                className={`p-2 rounded-lg transition-colors ${
+                  hideDone
+                    ? 'bg-[var(--color-bg-elevated)] text-[var(--color-fg-primary)]'
+                    : 'text-[var(--color-fg-muted)] hover:bg-[var(--color-bg-surface)]'
+                }`}
+                title="Hide completed tasks"
+              >
+                {hideDone ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+              </button>
             </div>
 
-            {/* Status Filter */}
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[var(--color-fg-muted)]" />
-              {['todo', 'doing', 'blocked', 'done', 'backlog'].map((status) => (
+            {/* Filters Row */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Status Filter */}
+              <div className="flex items-center gap-2">
+                {uniqueStatuses.map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => setFilterStatus(
+                      filterStatus.includes(status)
+                        ? filterStatus.filter(s => s !== status)
+                        : [...filterStatus, status]
+                    )}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors capitalize ${
+                      filterStatus.includes(status)
+                        ? 'bg-[var(--color-brand-primary)] text-white'
+                        : 'bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] text-[var(--color-fg-secondary)] hover:text-[var(--color-fg-primary)]'
+                    }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+
+              {/* Priority Filter */}
+              <div className="flex items-center gap-2">
+                {uniquePriorities.sort().reverse().map((priority) => (
+                  <button
+                    key={priority}
+                    onClick={() => setFilterPriority(
+                      filterPriority.includes(priority)
+                        ? filterPriority.filter(p => p !== priority)
+                        : [...filterPriority, priority]
+                    )}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors capitalize ${
+                      filterPriority.includes(priority)
+                        ? 'bg-[var(--color-brand-primary)] text-white'
+                        : 'bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] text-[var(--color-fg-secondary)] hover:text-[var(--color-fg-primary)]'
+                    }`}
+                  >
+                    {priority}
+                  </button>
+                ))}
+              </div>
+
+              {/* Clear Filters */}
+              {hasActiveFilters && (
                 <button
-                  key={status}
-                  onClick={() => toggleStatusFilter(status)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                    selectedStatuses.includes(status)
-                      ? 'bg-[var(--color-brand-primary)] text-white'
-                      : 'bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] text-[var(--color-fg-secondary)] hover:text-[var(--color-fg-primary)]'
-                  }`}
+                  onClick={clearAllFilters}
+                  className="px-3 py-1 rounded-full text-xs font-medium bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] text-[var(--color-fg-secondary)] hover:text-[var(--color-fg-primary)] transition-colors flex items-center gap-1"
                 >
-                  {status}
+                  <X className="w-3 h-3" />
+                  Clear filters
                 </button>
-              ))}
+              )}
             </div>
+
+            {/* Kanban Group By */}
+            {view === 'kanban' && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-[var(--color-fg-muted)]">Group by:</span>
+                {(['status', 'priority', 'assignee'] as KanbanGroupBy[]).map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => setKanbanGroupBy(option)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors capitalize ${
+                      kanbanGroupBy === option
+                        ? 'bg-[var(--color-brand-primary)] text-white'
+                        : 'bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] text-[var(--color-fg-secondary)] hover:text-[var(--color-fg-primary)]'
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Table */}
+          {/* Content */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
-            className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg overflow-hidden"
+            key={`${view}-${kanbanGroupBy}`}
           >
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-[var(--color-border-default)]">
-                    <SortHeader field="title" label="Task" />
-                    <SortHeader field="status" label="Status" />
-                    <SortHeader field="priority" label="Priority" />
-                    <SortHeader field="dueDate" label="Due Date" />
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[var(--color-fg-muted)] bg-[var(--color-bg-canvas)]">
-                      Assignee
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--color-border-subtle)]">
-                  {filteredTasks.map((task) => (
-                    <motion.tr
-                      key={task.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      onClick={() => setSelectedTask(task)}
-                      className="hover:bg-[var(--color-bg-elevated)] transition-colors cursor-pointer"
-                    >
-                      <td className="px-6 py-4 text-sm text-[var(--color-fg-primary)] font-medium">
-                        {task.title}
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <span className={`${statusColors[task.status]} font-medium capitalize`}>
-                          {task.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <span className={`${priorityColors[task.priority]} font-medium capitalize`}>
-                          {task.priority}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-[var(--color-fg-secondary)]">
-                        {task.dueDate?.toLocaleDateString() || '—'}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-[var(--color-fg-secondary)]">
-                        {task.assignee || '—'}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {filteredTasks.length === 0 && (
-              <div className="px-6 py-12 text-center">
-                <p className="text-[var(--color-fg-muted)]">No tasks match your filters</p>
+            {view === 'table' && renderTableView()}
+            {view === 'kanban' && renderKanbanView()}
+            {view === 'calendar' && (
+              <div className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-8 text-center">
+                <p className="text-[var(--color-fg-secondary)]">Calendar view coming soon</p>
+              </div>
+            )}
+            {view === 'blockers' && (
+              <div className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-8 text-center">
+                <p className="text-[var(--color-fg-secondary)]">Blockers view coming soon</p>
               </div>
             )}
           </motion.div>
