@@ -2,8 +2,24 @@
 
 import { AppLayout } from '@/components/layout/AppLayout';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 export default function SettingsPage() {
+  const [formData, setFormData] = useState({
+    name: 'Jamie Ludlow',
+    email: 'jamie@example.com',
+    workspaceName: 'My Workspace',
+  });
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async () => {
+    // Simulate saving
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    localStorage.setItem('settings', JSON.stringify(formData));
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
   return (
     <AppLayout>
       <div className="p-8">
@@ -27,7 +43,7 @@ export default function SettingsPage() {
           >
             {/* Profile Section */}
             <div className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-[var(--color-fg-primary)] mb-4">
+              <h2 className="text-lg font-semibold text-[var(--color-fg-primary)] mb-6">
                 Profile
               </h2>
               <div className="space-y-4">
@@ -37,8 +53,9 @@ export default function SettingsPage() {
                   </label>
                   <input
                     type="text"
-                    defaultValue="Jamie Ludlow"
-                    className="w-full px-4 py-2 rounded-lg bg-[var(--color-bg-canvas)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] focus:border-[var(--color-brand-primary)] transition-colors"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-2 rounded-lg bg-[var(--color-bg-canvas)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] focus:border-[var(--color-brand-primary)] outline-none transition-colors"
                   />
                 </div>
                 <div>
@@ -47,8 +64,9 @@ export default function SettingsPage() {
                   </label>
                   <input
                     type="email"
-                    defaultValue="jamie@example.com"
-                    className="w-full px-4 py-2 rounded-lg bg-[var(--color-bg-canvas)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] focus:border-[var(--color-brand-primary)] transition-colors"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-2 rounded-lg bg-[var(--color-bg-canvas)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] focus:border-[var(--color-brand-primary)] outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -56,27 +74,41 @@ export default function SettingsPage() {
 
             {/* Workspace Section */}
             <div className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-[var(--color-fg-primary)] mb-4">
+              <h2 className="text-lg font-semibold text-[var(--color-fg-primary)] mb-6">
                 Workspace
               </h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-fg-primary)] mb-2">
-                    Workspace Name
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="My Workspace"
-                    className="w-full px-4 py-2 rounded-lg bg-[var(--color-bg-canvas)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] focus:border-[var(--color-brand-primary)] transition-colors"
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-fg-primary)] mb-2">
+                  Workspace Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.workspaceName}
+                  onChange={(e) => setFormData({ ...formData, workspaceName: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg bg-[var(--color-bg-canvas)] border border-[var(--color-border-default)] text-[var(--color-fg-primary)] focus:border-[var(--color-brand-primary)] outline-none transition-colors"
+                />
               </div>
             </div>
 
             {/* Save Button */}
-            <button className="px-4 py-2 rounded-lg bg-[var(--color-brand-primary)] text-white font-medium hover:opacity-90 transition-opacity">
-              Save Changes
-            </button>
+            <motion.div className="flex gap-2">
+              <button
+                onClick={handleSave}
+                className="px-6 py-2 rounded-lg bg-[var(--color-brand-primary)] text-white font-medium hover:opacity-90 transition-opacity"
+              >
+                Save Changes
+              </button>
+              {saved && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="flex items-center px-4 py-2 rounded-lg bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300 text-sm font-medium"
+                >
+                  Saved successfully
+                </motion.div>
+              )}
+            </motion.div>
           </motion.div>
         </div>
       </div>
