@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Inter+Tight:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Colors - Background */
+  --color-bg-canvas: #07090b;
+  --color-bg-surface: #0d1117;
+  --color-bg-elevated: #131922;
+  --color-bg-overlay: rgba(5, 8, 12, 0.72);
+
+  /* Colors - Foreground */
+  --color-fg-primary: #f5f7fa;
+  --color-fg-secondary: #c8d0db;
+  --color-fg-muted: #8b97a7;
+  --color-fg-inverse: #081018;
+
+  /* Colors - Border */
+  --color-border-subtle: rgba(255,255,255,0.06);
+  --color-border-default: rgba(255,255,255,0.10);
+  --color-border-strong: rgba(255,255,255,0.18);
+
+  /* Colors - Brand */
+  --color-brand-primary: #6ee7d8;
+  --color-brand-primary-hover: #8af1e4;
+  --color-brand-primary-active: #4fd7c6;
+  --color-brand-secondary: #7dd3fc;
+  --color-brand-accent: #b8f3ff;
+
+  /* Colors - Status */
+  --color-status-success: #34d399;
+  --color-status-warning: #fbbf24;
+  --color-status-danger: #fb7185;
+  --color-status-info: #60a5fa;
+  --color-status-neutral: #94a3b8;
+
+  /* Colors - Task */
+  --color-task-todo: #94a3b8;
+  --color-task-doing: #60a5fa;
+  --color-task-done: #34d399;
+  --color-task-blocked: #fb7185;
+  --color-task-backlog: #c084fc;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+  --spacing-4xl: 40px;
+  --spacing-5xl: 48px;
+  --spacing-6xl: 56px;
+  --spacing-7xl: 64px;
+  --spacing-8xl: 80px;
+  --spacing-9xl: 96px;
+
+  /* Radius */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+
+  /* Shadow */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.18);
+  --shadow-sm: 0 8px 24px rgba(0,0,0,0.16);
+  --shadow-md: 0 14px 40px rgba(0,0,0,0.20);
+  --shadow-lg: 0 22px 60px rgba(0,0,0,0.24);
+  --shadow-xl: 0 32px 90px rgba(0,0,0,0.28);
+
+  /* Motion */
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --motion-slow: 260ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+
+  /* Typography */
+  --font-display: 'Inter Tight', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Icon sizes */
+  --icon-xs: 14px;
+  --icon-sm: 16px;
+  --icon-md: 18px;
+  --icon-lg: 20px;
+  --icon-xl: 24px;
+}
+
+@theme inline {
+  --color-background: var(--color-bg-canvas);
+  --color-foreground: var(--color-fg-primary);
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-canvas);
+  color: var(--color-fg-primary);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default button, input, and other form element styling */
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, select, textarea {
+  transition: all var(--motion-base) var(--motion-ease-standard);
+}
+
+/* Remove default focus outline in favor of design system */
+:focus {
+  outline: none;
+}
+
+/* Utility classes for common patterns */
+.text-xs { font-size: 12px; line-height: 1.5; }
+.text-sm { font-size: 14px; line-height: 1.5; }
+.text-base { font-size: 16px; line-height: 1.6; }
+.text-lg { font-size: 18px; line-height: 1.6; }
+.text-xl { font-size: 20px; line-height: 1.6; }
+.text-2xl { font-size: 24px; line-height: 1.4; }
+.text-3xl { font-size: 32px; line-height: 1.2; }
+.text-4xl { font-size: 40px; line-height: 1.2; }
+
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+.font-mono { font-family: var(--font-mono); }
+
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }

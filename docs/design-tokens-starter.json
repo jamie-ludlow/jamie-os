@@ -1,0 +1,75 @@
+{
+  "color": {
+    "bg": {
+      "canvas": "#07090b",
+      "surface": "#0d1117",
+      "elevated": "#131922",
+      "overlay": "rgba(5, 8, 12, 0.72)"
+    },
+    "fg": {
+      "primary": "#f5f7fa",
+      "secondary": "#c8d0db",
+      "muted": "#8b97a7",
+      "inverse": "#081018"
+    },
+    "border": {
+      "subtle": "rgba(255,255,255,0.06)",
+      "default": "rgba(255,255,255,0.10)",
+      "strong": "rgba(255,255,255,0.18)"
+    },
+    "brand": {
+      "primary": "#6ee7d8",
+      "primaryHover": "#8af1e4",
+      "primaryActive": "#4fd7c6",
+      "secondary": "#7dd3fc",
+      "accent": "#b8f3ff"
+    },
+    "status": {
+      "success": "#34d399",
+      "warning": "#fbbf24",
+      "danger": "#fb7185",
+      "info": "#60a5fa",
+      "neutral": "#94a3b8"
+    },
+    "task": {
+      "todo": "#94a3b8",
+      "doing": "#60a5fa",
+      "done": "#34d399",
+      "blocked": "#fb7185",
+      "backlog": "#c084fc"
+    }
+  },
+  "radius": {
+    "xs": 8,
+    "sm": 12,
+    "md": 16,
+    "lg": 20,
+    "xl": 24,
+    "2xl": 32
+  },
+  "spacing": [4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 96],
+  "shadow": {
+    "xs": "0 1px 2px rgba(0,0,0,0.18)",
+    "sm": "0 8px 24px rgba(0,0,0,0.16)",
+    "md": "0 14px 40px rgba(0,0,0,0.20)",
+    "lg": "0 22px 60px rgba(0,0,0,0.24)",
+    "xl": "0 32px 90px rgba(0,0,0,0.28)"
+  },
+  "motion": {
+    "fast": "120ms",
+    "base": "180ms",
+    "slow": "260ms",
+    "easeStandard": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+    "easeEnter": "cubic-bezier(0.16, 1, 0.3, 1)",
+    "easeExit": "cubic-bezier(0.7, 0, 0.84, 0)"
+  },
+  "typography": {
+    "display": "Inter Tight",
+    "body": "Inter",
+    "mono": "JetBrains Mono"
+  },
+  "icon": {
+    "family": "lucide-react",
+    "sizes": [14, 16, 18, 20, 24]
+  }
+}
