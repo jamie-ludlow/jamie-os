@@ -1,58 +1,82 @@
 /**
- * jamie-os Design Tokens
+ * jamie-os Design Tokens - Linear-Inspired Professional
  * 
- * This is the single source of truth for all visual design.
- * Never hardcode color/spacing/radius/shadow values in components.
- * Always reference tokens from here.
- * 
- * Changes made here automatically cascade through the entire app
- * via CSS variables and component variants.
+ * Refined, minimal, enterprise-grade color system
+ * Supports light and dark themes seamlessly
  */
 
 export const tokens = {
-  // Colors - Dark cinematic theme
-  color: {
+  // Light theme
+  light: {
     bg: {
-      canvas: '#07090b',
-      surface: '#0d1117',
-      elevated: '#131922',
-      overlay: 'rgba(5, 8, 12, 0.72)',
+      canvas: '#ffffff',
+      surface: '#f7f6f3',
+      elevated: '#efefed',
+      overlay: 'rgba(0, 0, 0, 0.5)',
     },
     fg: {
-      primary: '#f5f7fa',
-      secondary: '#c8d0db',
-      muted: '#8b97a7',
-      inverse: '#081018',
+      primary: '#000000',
+      secondary: '#626262',
+      muted: '#8f8f8f',
+      inverse: '#ffffff',
     },
     border: {
-      subtle: 'rgba(255,255,255,0.06)',
-      default: 'rgba(255,255,255,0.10)',
-      strong: 'rgba(255,255,255,0.18)',
+      subtle: '#e5e5e5',
+      default: '#d4d4d4',
+      strong: '#bfbfbf',
     },
     brand: {
-      primary: '#6ee7d8',
-      primaryHover: '#8af1e4',
-      primaryActive: '#4fd7c6',
-      secondary: '#7dd3fc',
-      accent: '#b8f3ff',
+      primary: '#0d66d0',
+      primaryHover: '#0a51a8',
+      primaryActive: '#083884',
+      secondary: '#6366f1',
+      accent: '#06b6d4',
     },
     status: {
-      success: '#34d399',
-      warning: '#fbbf24',
-      danger: '#fb7185',
-      info: '#60a5fa',
-      neutral: '#94a3b8',
-    },
-    task: {
-      todo: '#94a3b8',
-      doing: '#60a5fa',
-      done: '#34d399',
-      blocked: '#fb7185',
-      backlog: '#c084fc',
+      success: '#059669',
+      warning: '#d97706',
+      danger: '#dc2626',
+      info: '#0284c7',
+      neutral: '#6b7280',
     },
   },
 
-  // Spacing scale - 4px base
+  // Dark theme
+  dark: {
+    bg: {
+      canvas: '#0a0a0a',
+      surface: '#16161a',
+      elevated: '#1e1e24',
+      overlay: 'rgba(0, 0, 0, 0.7)',
+    },
+    fg: {
+      primary: '#ffffff',
+      secondary: '#b4b4b4',
+      muted: '#808080',
+      inverse: '#0a0a0a',
+    },
+    border: {
+      subtle: '#2a2a2e',
+      default: '#3a3a3f',
+      strong: '#4a4a4f',
+    },
+    brand: {
+      primary: '#3b82f6',
+      primaryHover: '#2563eb',
+      primaryActive: '#1d4ed8',
+      secondary: '#8b5cf6',
+      accent: '#06b6d4',
+    },
+    status: {
+      success: '#10b981',
+      warning: '#f59e0b',
+      danger: '#ef4444',
+      info: '#0ea5e9',
+      neutral: '#9ca3af',
+    },
+  },
+
+  // Shared (works for both themes)
   spacing: {
     xs: '4px',
     sm: '8px',
@@ -69,43 +93,39 @@ export const tokens = {
     '9xl': '96px',
   },
 
-  // Border radius scale
   radius: {
-    xs: '8px',
-    sm: '12px',
-    md: '16px',
-    lg: '20px',
-    xl: '24px',
-    '2xl': '32px',
+    none: '0px',
+    xs: '4px',
+    sm: '6px',
+    md: '8px',
+    lg: '12px',
+    xl: '16px',
+    full: '9999px',
   },
 
-  // Shadows - depth system
   shadow: {
-    xs: '0 1px 2px rgba(0,0,0,0.18)',
-    sm: '0 8px 24px rgba(0,0,0,0.16)',
-    md: '0 14px 40px rgba(0,0,0,0.20)',
-    lg: '0 22px 60px rgba(0,0,0,0.24)',
-    xl: '0 32px 90px rgba(0,0,0,0.28)',
+    xs: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    sm: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
   },
 
-  // Motion - animation timings
   motion: {
-    fast: '120ms',
-    base: '180ms',
-    slow: '260ms',
-    easeStandard: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+    fast: '100ms',
+    base: '150ms',
+    slow: '200ms',
+    easeStandard: 'cubic-bezier(0.4, 0, 0.2, 1)',
     easeEnter: 'cubic-bezier(0.16, 1, 0.3, 1)',
     easeExit: 'cubic-bezier(0.7, 0, 0.84, 0)',
   },
 
-  // Typography - font families
   font: {
-    display: 'var(--font-inter-tight)',
-    body: 'var(--font-inter)',
-    mono: 'var(--font-jetbrains-mono)',
+    display: 'Inter',
+    body: 'Inter',
+    mono: 'JetBrains Mono',
   },
 
-  // Icon sizes
   icon: {
     xs: '14px',
     sm: '16px',
@@ -115,12 +135,4 @@ export const tokens = {
   },
 } as const;
 
-/**
- * Export types for TypeScript component definitions
- */
 export type Token = typeof tokens;
-export type ColorKey = keyof typeof tokens.color;
-export type SpacingKey = keyof typeof tokens.spacing;
-export type RadiusKey = keyof typeof tokens.radius;
-export type ShadowKey = keyof typeof tokens.shadow;
-export type MotionKey = keyof typeof tokens.motion;

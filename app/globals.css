@@ -1,44 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Inter+Tight:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  /* Colors - Background */
-  --color-bg-canvas: #07090b;
-  --color-bg-surface: #0d1117;
-  --color-bg-elevated: #131922;
-  --color-bg-overlay: rgba(5, 8, 12, 0.72);
+  /* Light theme (default) */
+  --color-bg-canvas: #ffffff;
+  --color-bg-surface: #f7f6f3;
+  --color-bg-elevated: #efefed;
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
 
-  /* Colors - Foreground */
-  --color-fg-primary: #f5f7fa;
-  --color-fg-secondary: #c8d0db;
-  --color-fg-muted: #8b97a7;
-  --color-fg-inverse: #081018;
+  --color-fg-primary: #000000;
+  --color-fg-secondary: #626262;
+  --color-fg-muted: #8f8f8f;
+  --color-fg-inverse: #ffffff;
 
-  /* Colors - Border */
-  --color-border-subtle: rgba(255,255,255,0.06);
-  --color-border-default: rgba(255,255,255,0.10);
-  --color-border-strong: rgba(255,255,255,0.18);
+  --color-border-subtle: #e5e5e5;
+  --color-border-default: #d4d4d4;
+  --color-border-strong: #bfbfbf;
 
-  /* Colors - Brand */
-  --color-brand-primary: #6ee7d8;
-  --color-brand-primary-hover: #8af1e4;
-  --color-brand-primary-active: #4fd7c6;
-  --color-brand-secondary: #7dd3fc;
-  --color-brand-accent: #b8f3ff;
+  --color-brand-primary: #0d66d0;
+  --color-brand-primary-hover: #0a51a8;
+  --color-brand-primary-active: #083884;
+  --color-brand-secondary: #6366f1;
+  --color-brand-accent: #06b6d4;
 
-  /* Colors - Status */
-  --color-status-success: #34d399;
-  --color-status-warning: #fbbf24;
-  --color-status-danger: #fb7185;
-  --color-status-info: #60a5fa;
-  --color-status-neutral: #94a3b8;
-
-  /* Colors - Task */
-  --color-task-todo: #94a3b8;
-  --color-task-doing: #60a5fa;
-  --color-task-done: #34d399;
-  --color-task-blocked: #fb7185;
-  --color-task-backlog: #c084fc;
+  --color-status-success: #059669;
+  --color-status-warning: #d97706;
+  --color-status-danger: #dc2626;
+  --color-status-info: #0284c7;
+  --color-status-neutral: #6b7280;
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -56,30 +45,31 @@
   --spacing-9xl: 96px;
 
   /* Radius */
-  --radius-xs: 8px;
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
-  --radius-2xl: 32px;
+  --radius-none: 0px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
 
   /* Shadow */
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.18);
-  --shadow-sm: 0 8px 24px rgba(0,0,0,0.16);
-  --shadow-md: 0 14px 40px rgba(0,0,0,0.20);
-  --shadow-lg: 0 22px 60px rgba(0,0,0,0.24);
-  --shadow-xl: 0 32px 90px rgba(0,0,0,0.28);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Motion */
-  --motion-fast: 120ms;
-  --motion-base: 180ms;
-  --motion-slow: 260ms;
-  --motion-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-fast: 100ms;
+  --motion-base: 150ms;
+  --motion-slow: 200ms;
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --motion-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
 
   /* Typography */
-  --font-display: 'Inter Tight', sans-serif;
+  --font-display: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
@@ -91,6 +81,35 @@
   --icon-xl: 24px;
 }
 
+/* Dark theme */
+html.dark {
+  --color-bg-canvas: #0a0a0a;
+  --color-bg-surface: #16161a;
+  --color-bg-elevated: #1e1e24;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+
+  --color-fg-primary: #ffffff;
+  --color-fg-secondary: #b4b4b4;
+  --color-fg-muted: #808080;
+  --color-fg-inverse: #0a0a0a;
+
+  --color-border-subtle: #2a2a2e;
+  --color-border-default: #3a3a3f;
+  --color-border-strong: #4a4a4f;
+
+  --color-brand-primary: #3b82f6;
+  --color-brand-primary-hover: #2563eb;
+  --color-brand-primary-active: #1d4ed8;
+  --color-brand-secondary: #8b5cf6;
+  --color-brand-accent: #06b6d4;
+
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-danger: #ef4444;
+  --color-status-info: #0ea5e9;
+  --color-status-neutral: #9ca3af;
+}
+
 @theme inline {
   --color-background: var(--color-bg-canvas);
   --color-foreground: var(--color-fg-primary);
@@ -100,6 +119,11 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -109,34 +133,33 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--motion-base) var(--motion-ease-standard),
+              color var(--motion-base) var(--motion-ease-standard);
 }
 
-/* Remove default button, input, and other form element styling */
 button, input, select, textarea {
   font-family: inherit;
 }
 
-/* Smooth transitions for interactive elements */
 button, a, input, select, textarea {
   transition: all var(--motion-base) var(--motion-ease-standard);
 }
 
-/* Remove default focus outline in favor of design system */
 :focus {
   outline: none;
 }
 
-/* Utility classes for common patterns */
+/* Typography scales */
 .text-xs { font-size: 12px; line-height: 1.5; }
-.text-sm { font-size: 14px; line-height: 1.5; }
-.text-base { font-size: 16px; line-height: 1.6; }
-.text-lg { font-size: 18px; line-height: 1.6; }
-.text-xl { font-size: 20px; line-height: 1.6; }
-.text-2xl { font-size: 24px; line-height: 1.4; }
-.text-3xl { font-size: 32px; line-height: 1.2; }
-.text-4xl { font-size: 40px; line-height: 1.2; }
+.text-sm { font-size: 13px; line-height: 1.5; }
+.text-base { font-size: 14px; line-height: 1.6; }
+.text-lg { font-size: 16px; line-height: 1.6; }
+.text-xl { font-size: 18px; line-height: 1.6; }
+.text-2xl { font-size: 20px; line-height: 1.4; }
+.text-3xl { font-size: 24px; line-height: 1.2; }
+.text-4xl { font-size: 32px; line-height: 1.2; }
 
-.font-display { font-family: var(--font-display); }
+.font-display { font-family: var(--font-display); font-weight: 600; }
 .font-body { font-family: var(--font-body); }
 .font-mono { font-family: var(--font-mono); }
 

@@ -3,170 +3,185 @@
 import { AppLayout } from '@/components/layout/AppLayout';
 import { motion } from 'framer-motion';
 import {
-  TrendingUp,
-  AlertCircle,
   CheckCircle2,
+  AlertCircle,
   Clock,
+  TrendingUp,
 } from 'lucide-react';
 
 export default function Home() {
   return (
     <AppLayout>
-      <div className="p-8 max-w-7xl mx-auto">
-        {/* Page Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-8"
-        >
-          <h2 className="text-3xl font-bold font-display text-[var(--color-fg-primary)] mb-2">
-            Good morning, Jamie ✨
-          </h2>
-          <p className="text-[var(--color-fg-secondary)]">
-            Here's your task command center for today.
-          </p>
-        </motion.div>
+      <div className="p-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Page Header */}
+          <div className="mb-12">
+            <h1 className="text-4xl font-semibold text-[var(--color-fg-primary)] mb-2">
+              Dashboard
+            </h1>
+            <p className="text-[var(--color-fg-secondary)]">
+              Overview of your tasks and progress
+            </p>
+          </div>
 
-        {/* KPI Strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-          className="grid grid-cols-4 gap-4 mb-8"
-        >
-          {[
-            {
-              label: 'Today',
-              value: '5',
-              icon: Clock,
-              color: 'text-[var(--color-task-doing)]',
-            },
-            {
-              label: 'Completed',
-              value: '12',
-              icon: CheckCircle2,
-              color: 'text-[var(--color-task-done)]',
-            },
-            {
-              label: 'Blocked',
-              value: '2',
-              icon: AlertCircle,
-              color: 'text-[var(--color-task-blocked)]',
-            },
-            {
-              label: 'This Week',
-              value: '28',
-              icon: TrendingUp,
-              color: 'text-[var(--color-brand-primary)]',
-            },
-          ].map((stat, idx) => {
-            const Icon = stat.icon;
-            return (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -2 }}
-                className="p-6 rounded-lg bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] hover:border-[var(--color-border-strong)] transition-all"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-[var(--color-fg-muted)] mb-2">
-                      {stat.label}
-                    </p>
-                    <p className="text-3xl font-bold font-display text-[var(--color-fg-primary)]">
-                      {stat.value}
-                    </p>
-                  </div>
-                  <Icon className={`w-6 h-6 ${stat.color}`} />
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Recent Tasks Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.2 }}
-          className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-6 mb-8"
-        >
-          <h3 className="text-lg font-semibold font-display text-[var(--color-fg-primary)] mb-6">
-            Recent Tasks
-          </h3>
-
-          <div className="space-y-3">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-4 gap-4 mb-8">
             {[
               {
-                title: 'Design jamie-os dashboard mockups',
-                priority: 'High',
-                status: 'In Progress',
-                statusColor: 'text-[var(--color-task-doing)]',
+                label: 'Active Tasks',
+                value: '5',
+                icon: Clock,
+                change: '+2 this week',
               },
               {
-                title: 'Set up Supabase schema for tasks',
-                priority: 'High',
-                status: 'Todo',
-                statusColor: 'text-[var(--color-task-todo)]',
+                label: 'Completed',
+                value: '12',
+                icon: CheckCircle2,
+                change: '+3 this week',
               },
               {
-                title: 'Build component library',
-                priority: 'Medium',
-                status: 'In Progress',
-                statusColor: 'text-[var(--color-task-doing)]',
+                label: 'Blocked',
+                value: '2',
+                icon: AlertCircle,
+                change: '1 pending',
               },
               {
-                title: 'Write design system documentation',
-                priority: 'Medium',
-                status: 'Done',
-                statusColor: 'text-[var(--color-task-done)]',
+                label: 'Completion Rate',
+                value: '76%',
+                icon: TrendingUp,
+                change: '+4% vs last week',
               },
-            ].map((task, idx) => (
-              <motion.div
-                key={idx}
-                whileHover={{ x: 4 }}
-                className="flex items-center justify-between p-4 rounded-lg hover:bg-[var(--color-bg-elevated)] transition-colors cursor-pointer group"
-              >
-                <div className="flex items-center gap-4 flex-1">
-                  <input
-                    type="checkbox"
-                    className="w-5 h-5 rounded cursor-pointer"
-                  />
-                  <div className="flex-1">
-                    <p className="font-medium text-[var(--color-fg-primary)]">
-                      {task.title}
-                    </p>
+            ].map((stat, idx) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: idx * 0.05 }}
+                  className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-4"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <p className="text-xs font-medium text-[var(--color-fg-muted)] mb-1">
+                        {stat.label}
+                      </p>
+                      <p className="text-2xl font-semibold text-[var(--color-fg-primary)]">
+                        {stat.value}
+                      </p>
+                    </div>
+                    <Icon className="w-4 h-4 text-[var(--color-fg-muted)]" />
                   </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span
-                    className={`text-sm font-medium ${task.statusColor}`}
-                  >
-                    {task.status}
-                  </span>
-                  <span className="text-xs px-2 py-1 rounded bg-[var(--color-bg-canvas)] text-[var(--color-fg-secondary)]">
-                    {task.priority}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+                  <p className="text-xs text-[var(--color-fg-muted)]">
+                    {stat.change}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
-        </motion.div>
 
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="text-center py-8"
-        >
-          <p className="text-sm text-[var(--color-fg-muted)] mb-4">
-            Start by exploring the task board or creating a new task
-          </p>
-          <button className="px-6 py-3 rounded-lg bg-[var(--color-brand-primary)] text-[var(--color-fg-inverse)] font-medium hover:bg-[var(--color-brand-primary-hover)] transition-colors">
-            Create New Task
-          </button>
-        </motion.div>
+          {/* Main Content Area */}
+          <div className="grid grid-cols-3 gap-6">
+            {/* Recent Tasks - Takes 2 columns */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className="col-span-2 bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg"
+            >
+              <div className="px-6 py-4 border-b border-[var(--color-border-subtle)]">
+                <h2 className="text-sm font-semibold text-[var(--color-fg-primary)]">
+                  Recent Activity
+                </h2>
+              </div>
+              <div className="divide-y divide-[var(--color-border-subtle)]">
+                {[
+                  {
+                    title: 'Design new dashboard mockup',
+                    status: 'In Progress',
+                    priority: 'High',
+                  },
+                  {
+                    title: 'Review design system tokens',
+                    status: 'In Progress',
+                    priority: 'High',
+                  },
+                  {
+                    title: 'Set up Supabase database',
+                    status: 'To Do',
+                    priority: 'Medium',
+                  },
+                  {
+                    title: 'Build task list component',
+                    status: 'To Do',
+                    priority: 'High',
+                  },
+                ].map((task, idx) => (
+                  <div
+                    key={idx}
+                    className="px-6 py-4 hover:bg-[var(--color-bg-elevated)] transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 rounded border border-[var(--color-border-default)] cursor-pointer flex-shrink-0"
+                      />
+                      <p className="text-sm text-[var(--color-fg-primary)] truncate">
+                        {task.title}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3 flex-shrink-0 ml-4">
+                      <span className="text-xs font-medium text-[var(--color-fg-secondary)]">
+                        {task.status}
+                      </span>
+                      <span className="text-xs px-2 py-1 rounded bg-[var(--color-bg-canvas)] text-[var(--color-fg-muted)]">
+                        {task.priority}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Quick Stats Sidebar */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.25 }}
+              className="bg-[var(--color-bg-surface)] border border-[var(--color-border-default)] rounded-lg p-6"
+            >
+              <h3 className="text-sm font-semibold text-[var(--color-fg-primary)] mb-6">
+                This Week
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs text-[var(--color-fg-muted)] mb-2">
+                    Completed
+                  </p>
+                  <p className="text-2xl font-semibold text-[var(--color-fg-primary)]">
+                    8
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-[var(--color-fg-muted)] mb-2">
+                    In Progress
+                  </p>
+                  <p className="text-2xl font-semibold text-[var(--color-fg-primary)]">
+                    3
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-[var(--color-fg-muted)] mb-2">
+                    Total Tasks
+                  </p>
+                  <p className="text-2xl font-semibold text-[var(--color-fg-primary)]">
+                    11
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </AppLayout>
   );
