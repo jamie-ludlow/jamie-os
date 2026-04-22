@@ -76,7 +76,6 @@ export default function AuthPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-10">
       <Card className="w-full max-w-md p-5 border-border/20 bg-card/90 backdrop-blur shadow-sm">
         <div className="mb-4">
-          <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">Jamie OS</div>
           <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
         </div>
 
