@@ -61,18 +61,7 @@ export function ScheduleSection() {
   useEffect(() => {
     async function loadConfig() {
       try {
-        const apiKey = process.env.NEXT_PUBLIC_MC_API_KEY;
-        if (!apiKey) {
-          console.warn('MC_API_KEY not configured — using local state only');
-          setLoading(false);
-          return;
-        }
-
-        const res = await fetch('/api/agents/schedule', {
-          headers: {
-            'x-api-key': apiKey,
-          },
-        });
+        const res = await fetch('/api/agents/schedule');
 
         if (!res.ok) {
           console.error('Failed to load schedule config');
@@ -126,18 +115,10 @@ export function ScheduleSection() {
   async function handleSave() {
     setSaving(true);
     try {
-      const apiKey = process.env.NEXT_PUBLIC_MC_API_KEY;
-      if (!apiKey) {
-        console.warn('MC_API_KEY not configured');
-        setSaving(false);
-        return;
-      }
-
       const res = await fetch('/api/agents/schedule', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': apiKey,
         },
         body: JSON.stringify(config),
       });

@@ -28,7 +28,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function getSharedSecret() {
-  return process.env.PAPERCLIP_SYNC_SECRET || process.env.MC_API_KEY || null;
+  return process.env.PAPERCLIP_SYNC_SECRET || null;
 }
 
 type ExistingExternalTask = {
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Sync secret not configured' }, { status: 500 });
   }
 
-  const providedSecret = request.headers.get('x-paperclip-secret') || request.headers.get('x-api-key');
+  const providedSecret = request.headers.get('x-paperclip-secret');
   if (!providedSecret || providedSecret !== expectedSecret) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

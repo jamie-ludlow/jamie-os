@@ -37,11 +37,7 @@ export function PerformanceSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_MC_API_KEY;
-    
-    fetch('/api/agents/performance', {
-      headers: { 'x-api-key': apiKey || '' },
-    })
+    fetch('/api/agents/performance')
       .then((r) => {
         if (!r.ok) throw new Error('Failed to fetch');
         return r.json();

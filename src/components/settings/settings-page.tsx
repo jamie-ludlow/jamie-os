@@ -12,6 +12,7 @@ import { Check, ChevronDown, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScheduleSection } from './schedule-section';
 import { StatusesSection } from './statuses-section';
+import { AI_MODEL_OPTIONS, AI_FALLBACK_CHAIN, DEFAULT_AI_MODEL } from '@/lib/ai-models';
 
 const STORAGE_KEY = 'mc-settings';
 
@@ -26,13 +27,7 @@ const timezones = [
   'Asia/Tokyo',
 ];
 
-const modelOptions = [
-  { value: 'claude-opus-4-6', label: 'Claude Opus 4.6' },
-  { value: 'gpt-4.1', label: 'GPT-4.1' },
-  { value: 'gpt-4.1-mini', label: 'GPT-4.1 Mini' },
-  { value: 'gpt-4o', label: 'GPT-4o' },
-  { value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
-];
+const modelOptions = AI_MODEL_OPTIONS;
 
 const accentOptions = ['#6366f1', '#22c55e', '#3b82f6', '#f97316', '#ef4444'];
 
@@ -53,7 +48,7 @@ const defaultSettings = {
     digest: true,
   },
   agents: {
-    defaultModel: 'claude-opus-4-6',
+    defaultModel: DEFAULT_AI_MODEL,
     autoDeploy: true,
     tokenBudget: 50000,
   },
@@ -487,9 +482,9 @@ export function SettingsPage() {
                       agents: { ...prev.agents, defaultModel: value },
                     }))}
                   />
+                  <p className="text-[13px] text-muted-foreground/60">Primary model with automatic fallback to {AI_FALLBACK_CHAIN[1]}, then {AI_FALLBACK_CHAIN[2]}.</p>
                 </div>
 
-                {/* Token budget */}
                 <div className="grid gap-2">
                   <Label className="text-[13px] text-muted-foreground">Token budget limit</Label>
                   <input

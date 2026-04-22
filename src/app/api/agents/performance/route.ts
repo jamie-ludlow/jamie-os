@@ -20,12 +20,6 @@ interface AgentMetrics {
 
 export async function GET(request: Request) {
   try {
-    const apiKey = request.headers.get('x-api-key');
-    if (apiKey !== process.env.MC_API_KEY) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Fetch all flow log entries
     const { data: flowLogs, error: flowError } = await supabaseAdmin
       .from('agent_flow_log')
       .select('agent_id, action, task_title, created_at')

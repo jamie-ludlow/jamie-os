@@ -17,24 +17,6 @@ interface AgentUpdate {
 }
 
 export async function POST(req: NextRequest) {
-  // API key auth
-  const apiKey = req.headers.get('x-api-key');
-  const expectedKey = process.env.MC_API_KEY;
-
-  if (!expectedKey) {
-    return NextResponse.json(
-      { error: 'MC_API_KEY not configured' },
-      { status: 500 }
-    );
-  }
-
-  if (!apiKey || apiKey !== expectedKey) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
-  }
-
   try {
     const body: MeetingRequest = await req.json();
     const { type } = body;

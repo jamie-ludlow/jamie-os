@@ -73,24 +73,6 @@ function isCurrentlyActive(config: ScheduleConfig): boolean {
 }
 
 export async function GET(req: NextRequest) {
-  // API key auth
-  const apiKey = req.headers.get('x-api-key');
-  const expectedKey = process.env.MC_API_KEY;
-
-  if (!expectedKey) {
-    return NextResponse.json(
-      { error: 'MC_API_KEY not configured' },
-      { status: 500 }
-    );
-  }
-
-  if (!apiKey || apiKey !== expectedKey) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
-  }
-
   try {
     // Try to fetch from agent_config table
     const { data, error } = await supabaseAdmin
@@ -132,24 +114,6 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  // API key auth
-  const apiKey = req.headers.get('x-api-key');
-  const expectedKey = process.env.MC_API_KEY;
-
-  if (!expectedKey) {
-    return NextResponse.json(
-      { error: 'MC_API_KEY not configured' },
-      { status: 500 }
-    );
-  }
-
-  if (!apiKey || apiKey !== expectedKey) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
-  }
-
   try {
     const body = await req.json();
     const config = body as ScheduleConfig;

@@ -15,24 +15,6 @@ interface TokenUsageRequest {
 }
 
 export async function POST(request: Request) {
-  // API key check
-  const apiKey = request.headers.get('x-api-key');
-  const expectedKey = process.env.MC_API_KEY;
-
-  if (!expectedKey) {
-    return NextResponse.json(
-      { error: 'MC_API_KEY not configured' },
-      { status: 500 }
-    );
-  }
-
-  if (!apiKey || apiKey !== expectedKey) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
-  }
-
   try {
     const body: TokenUsageRequest = await request.json();
 
@@ -215,7 +197,7 @@ export async function GET(request: Request) {
     const getProvider = (model: string): string => {
       if (model.startsWith('claude-')) return 'Anthropic';
       if (model.startsWith('gpt-') || model.startsWith('o1-') || model.startsWith('o3-') || model.startsWith('codex-')) return 'OpenAI';
-      if (model.startsWith('gemini-')) return 'Google';
+      if (model.startsWith('gemini-') || model.startsWith('gemma-')) return 'Google';
       return 'Other';
     };
 

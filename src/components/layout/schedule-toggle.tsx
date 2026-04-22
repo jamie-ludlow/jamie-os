@@ -36,13 +36,7 @@ export function ScheduleToggle() {
 
   const fetchSchedule = async () => {
     try {
-      const apiKey = process.env.NEXT_PUBLIC_MC_API_KEY;
-      const res = await fetch('/api/agents/schedule', {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey || ''
-        }
-      });
+      const res = await fetch('/api/agents/schedule');
       if (!res.ok) throw new Error('Failed to fetch schedule');
       const json = await res.json();
       setData(json);
@@ -63,12 +57,10 @@ export function ScheduleToggle() {
     const newEnabled = !data.config.enabled;
     
     try {
-      const apiKey = process.env.NEXT_PUBLIC_MC_API_KEY;
       const res = await fetch('/api/agents/schedule', {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
-          'x-api-key': apiKey || ''
         },
         body: JSON.stringify({ 
           ...data.config,
@@ -96,13 +88,10 @@ export function ScheduleToggle() {
 
     try {
       const enabledUntil = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
-      const apiKey = process.env.NEXT_PUBLIC_MC_API_KEY;
-      
       const res = await fetch('/api/agents/schedule', {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
-          'x-api-key': apiKey || ''
         },
         body: JSON.stringify({ 
           ...data.config,
@@ -127,10 +116,9 @@ export function ScheduleToggle() {
   const clearOverride = async () => {
     if (!data?.config) return;
     try {
-      const apiKey = process.env.NEXT_PUBLIC_MC_API_KEY;
       const res = await fetch('/api/agents/schedule', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey || '' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data.config, tempOverride: null }),
       });
       if (!res.ok) throw new Error('Failed to clear override');
