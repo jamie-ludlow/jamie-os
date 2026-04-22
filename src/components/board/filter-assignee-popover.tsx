@@ -1,24 +1,42 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ASSIGNEE_COLORS, NAME_TO_SLUG, SLUG_TO_NAME } from '@/lib/constants';
+import { ASSIGNEE_COLORS } from '@/lib/constants';
 
-// Derive from constants — automatically includes any new agents
-const ASSIGNEES = Object.keys(NAME_TO_SLUG);
-
-export function FilterAssigneePopover({ 
-  value, 
+export function FilterAssigneePopover({
+  value,
   onChange,
-}: { 
-  value: string[]; // array of selected assignees (empty = all)
+}: {
+  value: string[];
   onChange: (value: string[]) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [assignees, setAssignees] = useState<string[]>(['Agent']);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let alive = true;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/assignees', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to load assignees');
+        const data = await res.json();
+        if (!alive || !Array.isArray(data)) return;
+        const unique = Array.from(new Set(data.map((item) => String(item).trim()).filter(Boolean)));
+        if (unique.length > 0) setAssignees(unique);
+      } catch {
+        if (alive) setAssignees(['Agent']);
+      }
+    };
+    load();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
@@ -27,42 +45,33 @@ export function FilterAssigneePopover({
       setSearch('');
     }
   };
-  
-  const filtered = ASSIGNEES.filter(a => 
-    a.toLowerCase().includes(search.toLowerCase())
+
+  const filtered = useMemo(
+    () => assignees.filter((a) => a.toLowerCase().includes(search.toLowerCase())),
+    [assignees, search]
   );
 
   const handleToggle = (assignee: string) => {
-    // Convert display name to slug for storage — filter compares against task.assignee slugs
-    const slug = NAME_TO_SLUG[assignee] || assignee.toLowerCase();
-    if (value.includes(slug)) {
-      onChange(value.filter(v => v !== slug));
+    const key = assignee === 'Agent' ? 'agent' : assignee;
+    if (value.includes(key)) {
+      onChange(value.filter((v) => v !== key));
     } else {
-      onChange([...value, slug]);
+      onChange([...value, key]);
     }
   };
 
-  const handleClear = () => {
-    onChange([]);
-  };
+  const handleClear = () => onChange([]);
 
   const isActive = value.length > 0;
-  // value contains slugs — convert first slug to display name for label
-  const displayText = value.length === 0 
-    ? 'Assignee' 
-    : value.length === 1 
-      ? value[0] === '__none__' ? 'No assignee' : (SLUG_TO_NAME[value[0]] || value[0])
-      : `${value.length} assignees`;
-  
+  const displayText = value.length === 0 ? 'Assignee' : value.length === 1 ? (value[0] === '__none__' ? 'No assignee' : value[0] === 'agent' ? 'Agent' : value[0]) : `${value.length} assignees`;
+
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <button aria-label="Filter by assignee" className={`h-8 px-3 text-[13px] rounded-lg border transition-colors duration-150 flex items-center gap-1.5 whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none ${
-          isActive ? 'border-primary text-primary' : 'border-border/20 bg-secondary text-foreground hover:border-primary/50'
-        }`}>
+        <button aria-label="Filter by assignee" className={`h-8 px-3 text-[13px] rounded-lg border transition-colors duration-150 flex items-center gap-1.5 whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none ${isActive ? 'border-primary text-primary' : 'border-border/20 bg-secondary text-foreground hover:border-primary/50'}`}>
           {value.length === 1 && value[0] !== '__none__' && (
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] leading-none font-medium flex-shrink-0 ${ASSIGNEE_COLORS[value[0]] || 'bg-muted/40 text-muted-foreground'}`}>
-              {(SLUG_TO_NAME[value[0]] || value[0]).charAt(0)}
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] leading-none font-medium flex-shrink-0 ${ASSIGNEE_COLORS[value[0]] || ASSIGNEE_COLORS[value[0].toLowerCase()] || 'bg-muted/40 text-muted-foreground'}`}>
+              {(value[0] === 'agent' ? 'Agent' : value[0]).charAt(0)}
             </span>
           )}
           <span className="truncate max-w-[100px]">{displayText}</span>
@@ -74,11 +83,21 @@ export function FilterAssigneePopover({
           ref={inputRef}
           type="text"
           value={search}
-          onChange={(e) => { setSearch(e.target.value); setHighlightedIndex(0); }}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setHighlightedIndex(0);
+          }}
           onKeyDown={(e) => {
-            if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightedIndex(prev => Math.min(prev + 1, filtered.length - 1)); }
-            else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedIndex(prev => Math.max(prev - 1, 0)); }
-            else if (e.key === 'Enter' && highlightedIndex >= 0) { e.preventDefault(); handleToggle(filtered[highlightedIndex]); }
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              setHighlightedIndex((prev) => Math.min(prev + 1, filtered.length - 1));
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              setHighlightedIndex((prev) => Math.max(prev - 1, 0));
+            } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+              e.preventDefault();
+              handleToggle(filtered[highlightedIndex]);
+            }
           }}
           placeholder="Search..."
           className="w-full px-3 py-2 text-[13px] bg-transparent border-b border-border/20 outline-none text-foreground placeholder:text-muted-foreground/60 rounded-t-md"
@@ -87,7 +106,7 @@ export function FilterAssigneePopover({
           {!search && (
             <button
               onClick={() => {
-                if (value.includes('__none__')) onChange(value.filter(v => v !== '__none__'));
+                if (value.includes('__none__')) onChange(value.filter((v) => v !== '__none__'));
                 else onChange([...value, '__none__']);
               }}
               className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-[13px] hover:bg-muted/60 transition-colors duration-150 ${value.includes('__none__') ? 'bg-muted/50' : ''}`}
@@ -98,18 +117,16 @@ export function FilterAssigneePopover({
             </button>
           )}
           {filtered.map((a, idx) => {
-            const slug = NAME_TO_SLUG[a] || a.toLowerCase();
-            const isSelected = value.includes(slug);
+            const key = a === 'Agent' ? 'agent' : a;
+            const isSelected = value.includes(key);
             return (
               <button
                 key={a}
                 onClick={() => handleToggle(a)}
-                data-search-item 
-                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-[13px] hover:bg-muted/60 transition-colors duration-150 ${
-                  isSelected ? 'bg-muted/50' : ''
-                } ${highlightedIndex === idx ? 'bg-primary/15 text-primary' : ''}`}
+                data-search-item
+                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-[13px] hover:bg-muted/60 transition-colors duration-150 ${isSelected ? 'bg-muted/50' : ''} ${highlightedIndex === idx ? 'bg-primary/15 text-primary' : ''}`}
               >
-                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] leading-none font-medium ${ASSIGNEE_COLORS[a] || 'bg-muted/40 text-muted-foreground'}`}>
+                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] leading-none font-medium ${ASSIGNEE_COLORS[key] || ASSIGNEE_COLORS[key.toLowerCase()] || 'bg-muted/40 text-muted-foreground'}`}>
                   {a.charAt(0)}
                 </span>
                 <span className="flex-1 text-left">{a}</span>
@@ -118,11 +135,8 @@ export function FilterAssigneePopover({
             );
           })}
           {filtered.length === 0 && (
-            <div className="px-2 py-3 text-[13px] text-muted-foreground/30 text-center">
-              No assignees found
-            </div>
-          )}</div>
-
+            <div className="px-2 py-3 text-[13px] text-muted-foreground/30 text-center">No assignees found</div>
+          )}
           {value.length > 0 && (
             <>
               <div className="border-t border-border/20 my-1" />
@@ -134,7 +148,8 @@ export function FilterAssigneePopover({
               </button>
             </>
           )}
-              </PopoverContent>
+        </div>
+      </PopoverContent>
     </Popover>
   );
 }

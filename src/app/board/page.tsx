@@ -2,8 +2,8 @@
 
 import { KanbanBoard, type KanbanGroupBy } from '@/components/board/kanban-board';
 import { TableView } from '@/components/board/table-view';
-import { CalendarView } from '@/components/board/calendar-view';
 import { BlockerBoardView } from '@/components/board/blocker-board-view';
+import { CalendarView } from '@/components/board/calendar-view';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
 import type { Task } from '@/lib/types';
@@ -19,12 +19,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { LayoutGrid, Table2, Plus, Search, Eye, EyeOff, CalendarDays, X, Layers, AlertTriangle } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { SavedViews } from '@/components/board/saved-views';
 import { toast } from 'sonner';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { KanbanBoardSkeleton, TableViewSkeleton, CalendarViewSkeleton } from '@/components/ui/skeleton-loaders';
 import { useBoardData } from '@/hooks/use-board-data';
 import { useTaskFilters, presetToRange } from '@/hooks/use-task-filters';
+import { SavedViews } from '@/components/board/saved-views';
 
 type TaskWithProject = Task & { project_name?: string; project_color?: string };
 

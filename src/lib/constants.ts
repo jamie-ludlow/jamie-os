@@ -63,6 +63,8 @@ export const ASSIGNEE_COLORS: Record<string, string> = {
   'Copywriter': 'bg-amber-500/20 text-amber-400',
   'Analyst': 'bg-cyan-500/20 text-cyan-400',
   'Manager': 'bg-muted-foreground/20 text-slate-400',
+  'Agent': 'bg-slate-500/20 text-slate-300',
+  'agent': 'bg-slate-500/20 text-slate-300',
   'Trainer': 'bg-orange-500/20 text-orange-400',
   'Heartbeat': 'bg-pink-500/20 text-pink-400',
   // Paperclip / external roles
@@ -90,6 +92,7 @@ export const NAME_TO_SLUG: Record<string, string> = {
   'Engineer': 'Engineer',
   'Designer': 'Designer',
   'QA': 'QA',
+  'Agent': 'agent',
 };
 
 export const SLUG_TO_NAME: Record<string, string> = Object.fromEntries(

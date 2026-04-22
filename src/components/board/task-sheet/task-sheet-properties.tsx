@@ -25,7 +25,6 @@ interface PropertiesFormValues {
 
 interface TaskSheetPropertiesProps {
   form: PropertiesFormValues;
-  assigneeMetadata?: Record<string, unknown> | null;
   onStatusChange: (status: Task['status']) => void;
   onPriorityChange: (priority: string) => void;
   onAssigneeChange: (assignee: string) => void;
@@ -56,7 +55,6 @@ interface TaskSheetPropertiesProps {
 
 export function TaskSheetProperties({
   form,
-  assigneeMetadata,
   onStatusChange,
   onPriorityChange,
   onAssigneeChange,
@@ -110,8 +108,6 @@ export function TaskSheetProperties({
           onChange={onAssigneeChange}
           open={assigneeOpen}
           onOpenChange={setAssigneeOpen}
-          metadata={assigneeMetadata}
-          projectId={form.project_id}
         />
       </PropertyRow>
 

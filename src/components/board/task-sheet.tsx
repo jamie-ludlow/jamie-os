@@ -173,7 +173,6 @@ export function TaskSheet({
                 {/* Property grid */}
                 <TaskSheetProperties
                   form={form}
-                  assigneeMetadata={task?.external_metadata ?? null}
                   onStatusChange={status => setForm({ ...form, status })}
                   onPriorityChange={priority => setForm({ ...form, priority })}
                   onAssigneeChange={assignee => setForm({ ...form, assignee })}
