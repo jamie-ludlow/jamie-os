@@ -38,8 +38,9 @@ export default function AuthPage() {
 
     setResetLoading(true);
     try {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset`,
+        redirectTo: `${appUrl}/auth/reset`,
       });
       if (error) throw error;
       toast.success('Password reset email sent');
