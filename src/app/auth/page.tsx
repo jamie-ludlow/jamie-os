@@ -15,6 +15,8 @@ export default function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const resetKey = email.trim().toLowerCase() ? `jamieos_reset_${email.trim().toLowerCase()}` : null;
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -36,6 +38,17 @@ export default function AuthPage() {
       return;
     }
 
+    if (typeof window !== 'undefined' && resetKey) {
+      const lastSent = Number(window.localStorage.getItem(resetKey) || '0');
+      const elapsed = Date.now() - lastSent;
+      const cooldownMs = 15 * 60 * 1000;
+      if (lastSent && elapsed < cooldownMs) {
+        const mins = Math.ceil((cooldownMs - elapsed) / 60000);
+        toast.error(`Password reset already sent recently. Try again in ${mins} minute${mins === 1 ? '' : 's'}.`);
+        return;
+      }
+    }
+
     setResetLoading(true);
     try {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
@@ -43,9 +56,17 @@ export default function AuthPage() {
         redirectTo: `${appUrl}/auth/reset`,
       });
       if (error) throw error;
+      if (typeof window !== 'undefined' && resetKey) {
+        window.localStorage.setItem(resetKey, String(Date.now()));
+      }
       toast.success('Password reset email sent');
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to send reset email');
+      const message = err instanceof Error ? err.message : 'Failed to send reset email';
+      if (/rate limit|too many|exceeded/i.test(message)) {
+        toast.error('Password reset email rate limit hit. Please wait a bit before trying again.');
+      } else {
+        toast.error(message);
+      }
     } finally {
       setResetLoading(false);
     }
