@@ -20,7 +20,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
       )}
       tabIndex={-1}
     >
-      {!isReaderMode && pathname !== '/auth' && <Topbar />}
+      {!isReaderMode && !pathname.startsWith('/auth') && <Topbar />}
       <div className={cn(isReaderMode ? 'px-3 py-4 sm:px-4 sm:py-6' : 'px-4 py-3 sm:px-6 sm:py-4')}>{children}</div>
     </main>
   );

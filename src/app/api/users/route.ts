@@ -27,8 +27,29 @@ export async function POST(req: NextRequest) {
   const email = String(body.email || '').trim();
   const password = String(body.password || '').trim();
   const name = String(body.name || '').trim();
+  const mode = String(body.mode || 'create');
+  const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
   if (!email) return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+
+  if (mode === 'invite') {
+    const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+      data: { full_name: name || email, name: name || email },
+      redirectTo: `${origin}/auth/reset`,
+    });
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+
+    return NextResponse.json({
+      user: {
+        id: data.user?.id || email,
+        email,
+        name: name || email,
+        invited: true,
+      },
+    });
+  }
+
   if (!password) return NextResponse.json({ error: 'Password is required' }, { status: 400 });
 
   const { data, error } = await supabaseAdmin.auth.admin.createUser({

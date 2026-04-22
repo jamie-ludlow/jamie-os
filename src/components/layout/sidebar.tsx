@@ -28,7 +28,7 @@ type Agent = AgentStatus & { activity?: string | null };
 export function Sidebar() {
   const pathname = usePathname();
   const isReaderMode = isControlCenterReaderPath(pathname);
-  if (pathname === '/auth') return null;
+  if (pathname === '/auth' || pathname.startsWith('/auth/reset')) return null;
   const router = useRouter();
   const [agents, setAgents] = useState<Agent[]>([]);
   const { open: mobileOpen, close: mobileClose, collapsed, setCollapsed } = useMobileSidebar();

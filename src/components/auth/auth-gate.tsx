@@ -11,7 +11,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
-    if (pathname === '/auth') {
+    if (pathname === '/auth' || pathname.startsWith('/auth/reset')) {
       setReady(true);
       return;
     }

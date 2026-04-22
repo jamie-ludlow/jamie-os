@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,6 +14,7 @@ export default function AuthPage() {
   const router = useRouter();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [name, setName] = useState('Jamie Ludlow');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,6 +49,25 @@ export default function AuthPage() {
     }
   };
 
+  const sendReset = async () => {
+    if (!email) {
+      toast.error('Enter your email first');
+      return;
+    }
+    setResetLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset`,
+      });
+      if (error) throw error;
+      toast.success('Password reset link sent');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to send reset email');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
       <Card className="w-full max-w-md p-6 border-border/20 bg-card/90 backdrop-blur">
@@ -74,6 +95,14 @@ export default function AuthPage() {
                 <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" type="password" required />
               </div>
               <Button className="w-full" type="submit" disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</Button>
+              <div className="flex items-center justify-between gap-3 text-[13px] text-muted-foreground">
+                <button type="button" onClick={sendReset} disabled={resetLoading} className="hover:text-foreground transition-colors">
+                  {resetLoading ? 'Sending reset…' : 'Forgot password?'}
+                </button>
+                <Link href="/auth/reset" className="hover:text-foreground transition-colors">
+                  Open reset page
+                </Link>
+              </div>
             </form>
           </TabsContent>
           <TabsContent value="signup">
