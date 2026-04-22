@@ -20,16 +20,17 @@ export default function ResetPasswordPage() {
     const check = async () => {
       const { data } = await supabase.auth.getSession();
       if (!mounted) return;
-      setReady(true);
       if (!data.session) {
-        toast.error('Password reset link is missing or expired.');
+        router.replace('/auth');
+        return;
       }
+      setReady(true);
     };
     check();
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [router]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +62,7 @@ export default function ResetPasswordPage() {
           <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">Jamie OS</div>
           <h1 className="text-2xl font-semibold tracking-tight">Reset your password</h1>
           <p className="mt-2 text-[13px] text-muted-foreground">
-            Choose a new password for your Jamie OS account.
+            This page only works from a password reset email link.
           </p>
         </div>
 
