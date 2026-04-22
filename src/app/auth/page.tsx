@@ -73,7 +73,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-10">
+    <div className="min-h-screen overflow-hidden flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md p-5 border-border/20 bg-card/90 backdrop-blur shadow-sm">
         <div className="mb-4">
           <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
