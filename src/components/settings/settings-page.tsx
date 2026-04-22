@@ -12,7 +12,7 @@ import { Check, ChevronDown, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScheduleSection } from './schedule-section';
 import { StatusesSection } from './statuses-section';
-import { AI_MODEL_OPTIONS, AI_FALLBACK_CHAIN, DEFAULT_AI_MODEL } from '@/lib/ai-models';
+import { AI_MODEL_OPTIONS, DEFAULT_AI_MODEL, GEMMA_BACKUP_MODEL } from '@/lib/ai-models';
 
 const STORAGE_KEY = 'mc-settings';
 
@@ -482,7 +482,7 @@ export function SettingsPage() {
                       agents: { ...prev.agents, defaultModel: value },
                     }))}
                   />
-                  <p className="text-[13px] text-muted-foreground/60">Primary model with automatic fallback to {AI_FALLBACK_CHAIN[1]}, then {AI_FALLBACK_CHAIN[2]}.</p>
+                  <p className="text-[13px] text-muted-foreground/60">Primary model with automatic fallback to {GEMMA_BACKUP_MODEL} if the main model fails. The fallback should surface the primary error clearly, then continue as a safety net.</p>
                 </div>
 
                 <div className="grid gap-2">
