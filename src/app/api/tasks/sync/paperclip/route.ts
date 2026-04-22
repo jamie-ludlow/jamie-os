@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
 
   await logActivity({
     action: 'tasks_synced',
-    description: `Synced ${rows.length} Paperclip task${rows.length === 1 ? '' : 's'} into Mission Control`,
+    description: `Synced ${rows.length} Paperclip task${rows.length === 1 ? '' : 's'} into Jamie OS`,
     agent: 'paperclip',
     metadata: {
       source: 'paperclip',

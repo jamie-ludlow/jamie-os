@@ -1363,7 +1363,7 @@ export function UnifiedChangelogPage() {
           {/* Header */}
           <header className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-medium text-muted-foreground">Mission Control</span>
+              <span className="text-[11px] font-medium text-muted-foreground">Jamie OS</span>
               <h1 className="text-2xl font-bold tracking-tight">Changelog</h1>
             </div>
             <Button size="sm" onClick={() => setShowCreate(true)} className="text-[13px] shrink-0">

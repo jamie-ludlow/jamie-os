@@ -46,7 +46,7 @@ const PAGE_PURPOSE: Record<SectionKey, string> = {
   'cron-jobs': 'View your automations, schedules, and outcomes.',
   standards: 'Review the rules your system follows.',
   'operator-guide': 'Use this page as the short operator runbook for checking health, resolving trust confusion, and knowing where to go next.',
-  'mc-summary': 'Use this page for a short current summary of Mission Control, not as the canonical handbook or source-of-truth reference.',
+  'mc-summary': 'Use this page for a short current summary of Jamie OS, not as the canonical handbook or source-of-truth reference.',
   'system-improvements': 'Track issues, fixes, and improvements over time.',
   'share-export': 'Open and share access links for your system.',
   changelog: 'Review what changed and when.',
@@ -84,7 +84,7 @@ const READER_INTRO_BY_SLUG: Record<string, { what: string; who: string; next: st
     next: 'Next: File & Document Map or Fixing Problems.',
   },
   'file-document-map': {
-    what: 'This page maps the main Mission Control document and surface layers so you can quickly find where public/shared pages, handbook pages, operator pages, source pages, and runtime or retained-state surfaces live.',
+    what: 'This page maps the main Jamie OS document and surface layers so you can quickly find where public/shared pages, handbook pages, operator pages, source pages, and runtime or retained-state surfaces live.',
     who: 'Best for operators and maintainers who need to locate the right page layer, source path, or shared renderer route without guessing.',
     next: 'Next: Source-of-Truth Model, or jump directly to the layer you need once you know whether you want explanation, operator guidance, source reference, or current-state truth.',
   },
@@ -110,7 +110,7 @@ const READER_INTRO_BY_SLUG: Record<string, { what: string; who: string; next: st
   },
   'public-private-view-model': {
     what: 'This page explains the current surface split: what belongs on public/shared pages, what belongs on operator-facing pages, what belongs on source pages, and when to use runtime or retained-state surfaces instead.',
-    who: 'Best for anyone deciding which Mission Control surface to use for sharing, operating, referencing source material, or checking current state.',
+    who: 'Best for anyone deciding which Jamie OS surface to use for sharing, operating, referencing source material, or checking current state.',
     next: 'Next: Maintenance Prompt Pack, or jump directly to the surface that matches your audience and question type.',
   },
   'maintenance-prompt-pack': {
@@ -795,7 +795,7 @@ export function ControlCenterPage({ initialDocs, initialSection = 'overview', in
             <>
               <SectionCard title="What this page is for">
                 <div className="space-y-2 text-[13px] text-muted-foreground leading-6">
-                  <p>This page is the short map of the Mission Control system. Use it to orient yourself quickly, not to inspect live runtime health in detail.</p>
+                  <p>This page is the short map of the Jamie OS system. Use it to orient yourself quickly, not to inspect live runtime health in detail.</p>
                   <p>It should tell you what lives where, which pages answer which questions, and where to go next when you need deeper truth.</p>
                 </div>
               </SectionCard>
@@ -1077,7 +1077,7 @@ export function ControlCenterPage({ initialDocs, initialSection = 'overview', in
             <>
               <SectionCard title="What governance means here">
                 <div className="space-y-2 text-[13px] text-muted-foreground leading-6">
-                  <p>Governance in Mission Control means the checks that help confirm the system is aligned with its intended setup, rules, and audit expectations.</p>
+                  <p>Governance in Jamie OS means the checks that help confirm the system is aligned with its intended setup, rules, and audit expectations.</p>
                   <p>This page is about trust, drift, validation, and policy alignment. It is not the page for live cron execution detail or day-to-day runtime triage.</p>
                 </div>
               </SectionCard>
@@ -1125,7 +1125,7 @@ export function ControlCenterPage({ initialDocs, initialSection = 'overview', in
             <>
               <SectionCard title="What this page is for">
                 <div className="space-y-2 text-[13px] text-muted-foreground leading-6">
-                  <p>This is the short operator page for Mission Control. Use it when you want a quick, trustworthy read on system health without opening the full handbook.</p>
+                  <p>This is the short operator page for Jamie OS. Use it when you want a quick, trustworthy read on system health without opening the full handbook.</p>
                   <p>It tells you what to check daily, which page answers which question, and what to trust when different surfaces appear to disagree.</p>
                 </div>
               </SectionCard>
@@ -1147,9 +1147,9 @@ export function ControlCenterPage({ initialDocs, initialSection = 'overview', in
                 </div>
               </SectionCard>
 
-              <SectionCard title="How to tell whether Mission Control is healthy">
+              <SectionCard title="How to tell whether Jamie OS is healthy">
                 <div className="space-y-2 text-[13px] text-muted-foreground leading-6">
-                  <p>Mission Control is healthy when the Overview page is healthy, the runtime snapshot is reasonably fresh, confidence is high enough to trust the page, and there are no unresolved warnings or repeated cron failures demanding attention.</p>
+                  <p>Jamie OS is healthy when the Overview page is healthy, the runtime snapshot is reasonably fresh, confidence is high enough to trust the page, and there are no unresolved warnings or repeated cron failures demanding attention.</p>
                   <p>If the status is warning or critical, the snapshot is stale, confidence drops, or cron failures stack up, treat the system as needing operator attention even if one surface still looks calm.</p>
                 </div>
               </SectionCard>
@@ -1218,21 +1218,21 @@ export function ControlCenterPage({ initialDocs, initialSection = 'overview', in
             <>
               <SectionCard title="What this page is for">
                 <div className="space-y-2 text-[13px] text-muted-foreground leading-6">
-                  <p>This page is the short summary view of Mission Control. Use it for quick orientation when you want the shape of the system without opening the full handbook.</p>
+                  <p>This page is the short summary view of Jamie OS. Use it for quick orientation when you want the shape of the system without opening the full handbook.</p>
                   <p>It is not the canonical handbook, not the source-of-truth model, and not the operator runbook for active trust checks.</p>
                 </div>
               </SectionCard>
 
               <SectionCard title="What belongs here">
                 <div className="space-y-2 text-[13px] text-muted-foreground leading-6">
-                  <p>Keep this page focused on the current high-level model: agent/runtime shape, memory architecture, and how scheduled work connects into Mission Control.</p>
+                  <p>Keep this page focused on the current high-level model: agent/runtime shape, memory architecture, and how scheduled work connects into Jamie OS.</p>
                   <p>Detailed trust interpretation belongs in Operator Guide, source authority belongs in Source-of-Truth Model, and broader explanation belongs in the handbook.</p>
                 </div>
               </SectionCard>
 
               <SectionCard title="How to use it well">
                 <div className="grid md:grid-cols-2 gap-3 text-[13px] text-muted-foreground">
-                  <div className="rounded border border-border/50 p-3"><div className="font-medium text-foreground mb-1">Use this page for</div><p>Quick orientation, current structure, and a short explanation of how Mission Control fits together.</p></div>
+                  <div className="rounded border border-border/50 p-3"><div className="font-medium text-foreground mb-1">Use this page for</div><p>Quick orientation, current structure, and a short explanation of how Jamie OS fits together.</p></div>
                   <div className="rounded border border-border/50 p-3"><div className="font-medium text-foreground mb-1">Do not use this page for</div><p>Canonical rules, detailed troubleshooting, governance decisions, or resolving trust conflicts between deeper surfaces.</p></div>
                 </div>
               </SectionCard>
@@ -1268,7 +1268,7 @@ export function ControlCenterPage({ initialDocs, initialSection = 'overview', in
                 <div className="rounded border border-border/50 p-3">
                   <h3 className="font-medium mb-2">Agent/runtime model and lifecycle</h3>
                   <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <div className="space-y-2">{renderReadable(byTitle.get('OpenClaw Agent Operating Model')?.content || byTitle.get('Mission Control Summary')?.content || '')}</div>
+                    <div className="space-y-2">{renderReadable(byTitle.get('OpenClaw Agent Operating Model')?.content || byTitle.get('Jamie OS Summary')?.content || '')}</div>
                   </div>
                 </div>
                 <div className="rounded border border-border/50 p-3">

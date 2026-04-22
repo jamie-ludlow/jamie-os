@@ -2,14 +2,14 @@
 
 /** Apps tracked in the unified changelog */
 export const APPS = [
-  { id: 'mission-control', label: 'Mission Control', color: 'indigo' },
+  { id: 'mission-control', label: 'Jamie OS', color: 'indigo' },
   { id: 'air-social', label: 'Air Social', color: 'emerald' },
 ] as const;
 
 export type AppId = (typeof APPS)[number]['id'];
 
 export const APP_BADGE: Record<string, { label: string; className: string }> = {
-  'mission-control': { label: 'Mission Control', className: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/20' },
+  'mission-control': { label: 'Jamie OS', className: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/20' },
   'air-social': { label: 'Air Social', className: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20' },
 };
 

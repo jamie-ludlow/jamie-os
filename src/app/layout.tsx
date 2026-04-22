@@ -13,13 +13,13 @@ import { LayoutContent } from '@/components/layout/layout-content';
 import { Toaster } from '@/components/ui/sonner';
 export const metadata: Metadata = {
   title: {
-    default: 'Mission Control',
-    template: '%s · Mission Control',
+    default: 'Jamie OS',
+    template: '%s · Jamie OS',
   },
-  description: '2nd Brain — Personal productivity hub',
+  description: 'Task-first personal command center',
   openGraph: {
-    title: 'Mission Control',
-    description: '2nd Brain — Personal productivity hub',
+    title: 'Jamie OS',
+    description: 'Task-first personal command center',
     type: 'website',
   },
 };

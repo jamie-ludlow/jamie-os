@@ -259,7 +259,7 @@ export function Sidebar() {
         </button>
         {!collapsed && (
           <div className="min-w-0">
-            <div className="text-[13px] font-bold tracking-tight truncate" role="heading" aria-level={2}>Mission Control</div>
+            <div className="text-[13px] font-bold tracking-tight truncate" role="heading" aria-level={2}>Jamie OS</div>
             <p className="text-[10px] text-muted-foreground truncate">powered by Casper</p>
           </div>
         )}

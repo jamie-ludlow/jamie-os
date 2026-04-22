@@ -28,9 +28,9 @@ export function PaperclipSyncBadge({ task, compact = false }: PaperclipSyncBadge
         ? 'Local task'
         : 'Paperclip draft';
   const tooltip = isSynced
-    ? 'This task is linked to a Paperclip issue and has been synced into Mission Control.'
+    ? 'This task is linked to a Paperclip issue and has been synced into Jamie OS.'
     : isFailed
-      ? 'Mission Control has Paperclip metadata for this task, but the latest sync failed.'
+      ? 'Jamie OS has Paperclip metadata for this task, but the latest sync failed.'
       : isLocal
         ? 'This task is local-only and is not linked to Paperclip.'
         : 'This task carries Paperclip metadata but has not fully synced yet.';

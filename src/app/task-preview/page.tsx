@@ -93,7 +93,7 @@ interface PreviewTask {
 }
 
 const PROJECTS = [
-  { id: 'mc', name: 'Mission Control', color: '#6366f1', created_at: '2026-01-01' },
+  { id: 'mc', name: 'Jamie OS', color: '#6366f1', created_at: '2026-01-01' },
   { id: 'lr', name: 'Lead Rise', color: '#f59e0b', created_at: '2026-01-01' },
   { id: 'lm', name: 'London Marathon', color: '#10b981', created_at: '2026-01-01' },
   { id: 'as', name: 'Air Social', color: '#06b6d4', created_at: '2026-01-01' },
@@ -1192,7 +1192,7 @@ export default function TaskPreviewPage() {
     status: 'done',
     priority: 'P1',
     assignee: 'Developer',
-    project: { id: 'mc', name: 'Mission Control', color: '#6366f1' },
+    project: { id: 'mc', name: 'Jamie OS', color: '#6366f1' },
     dueDate: new Date(2026, 1, 13),
     dueTime: '16:22',
     labels: ['bug', 'ui'],

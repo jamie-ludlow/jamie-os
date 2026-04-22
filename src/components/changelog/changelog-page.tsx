@@ -404,7 +404,7 @@ export function ChangelogPage() {
         {/* Header */}
         <header className="flex flex-col gap-1">
           <span className="text-[11px] font-medium text-muted-foreground">
-            Mission Control
+            Jamie OS
           </span>
           <h1 className="text-2xl font-bold tracking-tight">Changelog</h1>
         </header>
