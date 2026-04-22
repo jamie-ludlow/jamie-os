@@ -14,6 +14,7 @@ import { isControlCenterReaderPath } from '@/components/control-center/reader-mo
 const nav = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/board', label: 'Tasks', icon: ListChecks },
+  { href: '/users', label: 'Users', icon: Users },
   { href: '/projects', label: 'Projects', icon: FolderKanban },
   { href: '/documents', label: 'Documents', icon: FileText },
   { href: '/control-center', label: 'OpenClaw Control', icon: ShieldCheck },
@@ -27,6 +28,7 @@ type Agent = AgentStatus & { activity?: string | null };
 export function Sidebar() {
   const pathname = usePathname();
   const isReaderMode = isControlCenterReaderPath(pathname);
+  if (pathname === '/auth') return null;
   const router = useRouter();
   const [agents, setAgents] = useState<Agent[]>([]);
   const { open: mobileOpen, close: mobileClose, collapsed, setCollapsed } = useMobileSidebar();

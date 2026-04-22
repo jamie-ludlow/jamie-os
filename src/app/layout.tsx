@@ -4,6 +4,7 @@ import './globals.css';
 
 const geistSans = Geist({ subsets: ['latin'], variable: '--font-geist-sans' });
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' });
+import { AuthGate } from '@/components/auth/auth-gate';
 import { Sidebar } from '@/components/layout/sidebar';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { MobileSidebarProvider } from '@/components/layout/mobile-sidebar-context';
@@ -68,10 +69,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemePaletteProvider>
           <MobileSidebarProvider>
             <KeyboardShortcutsProvider>
-              <div className="flex h-screen overflow-hidden">
-                <Sidebar />
-                <LayoutContent>{children}</LayoutContent>
-              </div>
+              <AuthGate>
+                <div className="flex h-screen overflow-hidden">
+                  <Sidebar />
+                  <LayoutContent>{children}</LayoutContent>
+                </div>
+              </AuthGate>
             </KeyboardShortcutsProvider>
           </MobileSidebarProvider>
           </ThemePaletteProvider>

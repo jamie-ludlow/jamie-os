@@ -10,14 +10,15 @@ import { ScheduleToggle } from '@/components/layout/schedule-toggle';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { useMobileSidebar } from './mobile-sidebar-context';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { supabase } from '@/lib/supabase';
 
 export function Topbar() {
   const { theme, toggle } = useTheme();
   const { toggle: toggleSidebar } = useMobileSidebar();
 
-  const handleSignOut = () => {
-    // TODO: Implement sign out when auth is added
-    console.log('Sign out clicked');
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/auth';
   };
 
   return (
