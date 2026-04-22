@@ -75,7 +75,7 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen overflow-hidden flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md p-5 border-border/20 bg-card/90 backdrop-blur shadow-sm">
-        <div className="mb-2">
+        <div className="mb-4">
           <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">JAMIE OS</div>
           <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
         </div>
