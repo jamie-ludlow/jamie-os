@@ -78,9 +78,6 @@ export default function AuthPage() {
         <div className="mb-4">
           <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">Jamie OS</div>
           <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
-          <p className="mt-2 text-[13px] text-muted-foreground">
-            Internal team access only. New users are added by admins from the Users page.
-          </p>
         </div>
 
         <form className="space-y-3.5" onSubmit={submit}>
