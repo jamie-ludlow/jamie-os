@@ -75,7 +75,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen overflow-hidden bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-card border border-border/20 rounded-xl p-5 shadow-sm">
+        <div className="bg-card border border-border/20 rounded-xl p-5 shadow-xl">
           <div className="mb-4">
             <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">JAMIE OS</div>
             <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>

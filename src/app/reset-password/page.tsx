@@ -104,15 +104,15 @@ export default function ResetPasswordPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
-        <div className="mb-8 text-center">
-          <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">JAMIE OS</div>
-          <h1 className="text-[16px] font-semibold text-foreground">Reset password</h1>
-          <p className="mt-2 text-[13px] text-muted-foreground">
-            Choose a new password for your Jamie OS account.
-          </p>
-        </div>
-
         <div className="bg-card border border-border/20 rounded-xl p-6 shadow-xl">
+          <div className="mb-6 text-center">
+            <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">JAMIE OS</div>
+            <h1 className="text-[16px] font-semibold text-foreground">Reset password</h1>
+            <p className="mt-2 text-[13px] text-muted-foreground">
+              Choose a new password for your Jamie OS account.
+            </p>
+          </div>
+
           <form onSubmit={submit} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="password" className="text-[13px] text-muted-foreground">
