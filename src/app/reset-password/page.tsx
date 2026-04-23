@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
   if (invalid) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-sm rounded-xl border border-border/20 bg-card p-6 text-center shadow-sm">
+        <div className="w-full max-w-sm rounded-xl border border-border/20 bg-card p-6 text-center shadow-xl">
           <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">JAMIE OS</div>
           <h1 className="text-[16px] font-semibold text-foreground">Reset link unavailable</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
   if (!ready) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-sm rounded-xl border border-border/20 bg-card p-6 text-center shadow-sm">
+        <div className="w-full max-w-sm rounded-xl border border-border/20 bg-card p-6 text-center shadow-xl">
           <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">JAMIE OS</div>
           <h1 className="text-[16px] font-semibold text-foreground">Resetting password…</h1>
           <p className="mt-2 text-sm text-muted-foreground">
