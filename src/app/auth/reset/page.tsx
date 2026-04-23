@@ -21,7 +21,7 @@ export default function ResetPasswordPage() {
       const { data } = await supabase.auth.getSession();
       if (!mounted) return;
       if (!data.session) {
-        router.replace('/auth');
+        setReady(false);
         return;
       }
       setReady(true);
@@ -47,13 +47,32 @@ export default function ResetPasswordPage() {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       toast.success('Password updated');
-      router.replace('/');
+      await supabase.auth.signOut();
+      router.replace('/auth');
+      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to update password');
     } finally {
       setLoading(false);
     }
   };
+
+  if (!ready) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
+        <Card className="w-full max-w-md p-6 border-border/20 bg-card/90 backdrop-blur text-center">
+          <div className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground mb-2">Jamie OS</div>
+          <h1 className="text-2xl font-semibold tracking-tight">Reset link unavailable</h1>
+          <p className="mt-2 text-[13px] text-muted-foreground">
+            This password reset link is not active. Please request a fresh reset email from the sign-in page.
+          </p>
+          <Button className="mt-5 w-full" onClick={() => router.replace('/auth')}>
+            Back to sign in
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
