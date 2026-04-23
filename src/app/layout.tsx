@@ -36,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <script dangerouslySetInnerHTML={{ __html: `try{document.documentElement.classList.add(localStorage.getItem('theme')||'dark')}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{if(['/login','/reset-password','/auth','/auth/reset'].includes(window.location.pathname)){document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light'}}catch(e){}` }} />
         <script dangerouslySetInnerHTML={{ __html: `
           // Auto-refresh on stale chunk errors (happens after deploys)
           window.addEventListener('error', function(e) {
