@@ -8,11 +8,11 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const showSkipLink = pathname !== '/auth' && !pathname.startsWith('/auth/reset');
+  const showSkipLink = pathname !== '/login' && !pathname.startsWith('/reset-password');
 
   useEffect(() => {
     let mounted = true;
-    if (pathname === '/auth' || pathname.startsWith('/auth/reset')) {
+    if (pathname === '/login' || pathname.startsWith('/reset-password')) {
       setReady(true);
       return;
     }
@@ -21,7 +21,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
       const { data } = await supabase.auth.getSession();
       if (!mounted) return;
       if (!data.session) {
-        router.replace('/auth');
+        router.replace('/login');
         return;
       }
       setReady(true);
@@ -31,8 +31,8 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return;
-      if (!session && pathname !== '/auth') {
-        router.replace('/auth');
+      if (!session && pathname !== '/login') {
+        router.replace('/login');
         return;
       }
       setReady(true);
@@ -44,7 +44,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     };
   }, [pathname, router]);
 
-  if (pathname === '/auth') return <>{children}</>;
+  if (pathname === '/login') return <>{children}</>;
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">

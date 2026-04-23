@@ -10,7 +10,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const { collapsed } = useMobileSidebar();
   const pathname = usePathname();
   const isReaderMode = isControlCenterReaderPath(pathname);
-  const isAuthPage = pathname.startsWith('/auth') || pathname === '/reset-password';
+  const isAuthPage = pathname.startsWith('/login') || pathname === '/reset-password';
 
   return (
     <main

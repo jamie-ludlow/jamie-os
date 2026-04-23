@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
   if (mode === 'invite') {
     const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
       data: { full_name: name || email, name: name || email },
-      redirectTo: `${origin}/auth/reset`,
+      redirectTo: `${origin}/reset-password`,
     });
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
