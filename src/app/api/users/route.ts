@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   const password = String(body.password || '').trim();
   const name = String(body.name || '').trim();
   const mode = String(body.mode || 'create');
-  const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL?.trim() || 'https://jamie-os.vercel.app';
 
   if (!email) return NextResponse.json({ error: 'Email is required' }, { status: 400 });
 

@@ -71,8 +71,9 @@ export default function UsersPage() {
       return;
     }
     try {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() || 'https://jamie-os.vercel.app';
       const { error } = await supabase.auth.resetPasswordForEmail(targetEmail, {
-        redirectTo: `${window.location.origin}/auth/reset`,
+        redirectTo: `${appUrl}/auth/reset`,
       });
       if (error) throw error;
       toast.success(`Reset email sent to ${targetEmail}`);
