@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createBrowserClient } from '@supabase/ssr';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -57,12 +58,15 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     try {
-      const { error } = await supabase.auth.updateUser({ password });
+      const authClient = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+      const { error } = await authClient.auth.updateUser({ password });
       if (error) throw error;
       toast.success('Password updated. Please sign in again.');
-      await supabase.auth.signOut();
-      router.replace('/login');
-      router.refresh();
+      await authClient.auth.signOut();
+      window.location.assign('/login');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to update password');
     } finally {

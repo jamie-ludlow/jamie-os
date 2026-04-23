@@ -10,6 +10,7 @@ import { ScheduleToggle } from '@/components/layout/schedule-toggle';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { useMobileSidebar } from './mobile-sidebar-context';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { createBrowserClient } from '@supabase/ssr';
 import { supabase } from '@/lib/supabase';
 
 export function Topbar() {
@@ -17,8 +18,17 @@ export function Topbar() {
   const { toggle: toggleSidebar } = useMobileSidebar();
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    window.location.href = '/login';
+    try {
+      const browserSupabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+      await browserSupabase.auth.signOut();
+    } catch (error) {
+      console.error('Sign out failed', error);
+    } finally {
+      window.location.assign('/login');
+    }
   };
 
   return (

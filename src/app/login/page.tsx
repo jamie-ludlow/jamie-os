@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { createBrowserClient } from '@supabase/ssr';
 import { supabase } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -21,10 +20,14 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const authClient = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+      const { error } = await authClient.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast.success('Signed in');
-      router.replace('/');
+      window.location.assign('/');
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Auth failed');
     } finally {
